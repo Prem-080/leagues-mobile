@@ -48,3 +48,65 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+
+# Frontend Structure — Leagues Mobile
+
+## Project Tree
+
+```
+frontend/
+├── app/                              # Expo Router — thin route files only
+│   ├── _layout.tsx                   # Root: AuthProvider + Stack
+│   ├── (auth)/                       # Auth route group
+│   │   ├── _layout.tsx               # Headerless Stack with fade animation
+│   │   ├── login.tsx                 # → LoginScreen
+│   │   └── register.tsx              # Placeholder
+│   └── (tabs)/                       # Main app (post-login)
+│       ├── _layout.tsx               # Bottom tab navigator (dark theme)
+│       └── index.tsx                 # Home screen placeholder
+│
+├── src/
+│   ├── features/                     # Feature modules (domain logic + UI)
+│   │   └── auth/
+│   │       ├── api.ts                # login() API call
+│   │       ├── context.tsx           # AuthProvider + useAuth hook
+│   │       ├── types.ts              # AuthContextType
+│   │       ├── index.ts              # Barrel export
+│   │       └── components/
+│   │           ├── LoginScreen.tsx    # Full login UI (matches design)
+│   │           └── index.ts
+│   │
+│   └── shared/                       # Cross-feature reusables
+│       ├── components/
+│       │   ├── FloatingIcons.tsx      # Decorative background icons
+│       │   └── index.ts
+│       ├── constants/
+│       │   ├── colors.ts             # Color palette tokens
+│       │   ├── typography.ts         # Font size/weight tokens
+│       │   ├── spacing.ts            # Spacing + border radius tokens
+│       │   └── index.ts
+│       └── utils/
+│           └── apiClient.ts          # fetch wrapper with auth header
+│
+└── assets/images/                    # Static assets
+```
+
+## Key Design Decisions
+
+| Decision | Rationale |
+|---|---|
+| **Route files are thin** | `app/(auth)/login.tsx` only imports `LoginScreen` — all logic lives in `src/features/auth/` |
+| **Feature-based src** | Each feature (auth, etc.) owns its own API, context, types, and components |
+| **Barrel exports** | Every folder has `index.ts` — import from `@/src/features/auth` not deep paths |
+| **Design tokens** | Colors, spacing, typography in `shared/constants/` — single source of truth |
+| **Auth-gated routing** | `app/index.tsx` checks `token` and redirects to `(auth)` or `(tabs)` accordingly |
+
+## Login Screen
+
+The login screen matches the provided design with:
+- 🌑 Dark background (`#0B1120`) with warm amber overlay at top
+- 🎓 Floating educational icons (graduation caps, briefcases, books, lightbulbs)
+- 🌙 Decorative dark-mode toggle
+- 📋 Card with Google sign-in row, email/password inputs, orange Login button
+- 🔒 Forgot Password link + Sign Up option
