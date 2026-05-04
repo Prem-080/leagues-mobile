@@ -149,7 +149,7 @@ export default function LoginScreen() {
 
                   {/* Google */}
                   <TouchableOpacity activeOpacity={0.8} style={styles.googleRow} onPress={handleGoogleLogin}>
-                    <GoogleButton/>
+                    <GoogleButton />
                   </TouchableOpacity>
 
                   {/* Divider */}
