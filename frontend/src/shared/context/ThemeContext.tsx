@@ -1,32 +1,37 @@
 // src/shared/context/ThemeContext.tsx
 
-import React, { createContext, useContext, useState } from 'react';
-import { Theme, lightTheme, darkTheme } from '../constants/theme';
+import React, { createContext, useContext } from "react";
+import { View } from "react-native";
+import { useColorScheme } from "nativewind";
+import { themes } from "@/src/utils/color-theme";
 
-type ThemeContextType = {
-  theme: Theme;
-  isDark: boolean;
-  toggleTheme: () => void;
-};
+interface ThemeContextType {
+  theme: "light" | "dark";
+}
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextType>({
+  theme: "light",
+});
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDark, setIsDark] = useState(true);
+interface ThemeProviderProps {
+  children: React.ReactNode;
+}
 
-  const toggleTheme = () => setIsDark(prev => !prev);
+export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+  const { colorScheme } = useColorScheme();
+  const theme = (colorScheme as "light" | "dark") || "light";
 
-  const value: ThemeContextType = {
-    theme: isDark ? darkTheme : lightTheme,
-    isDark,
-    toggleTheme,
-  };
-
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={{ theme }}>
+      <View style={themes[theme]} className="flex-1">
+        {children}
+      </View>
+    </ThemeContext.Provider>
+  );
 };
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error('useTheme must be used inside ThemeProvider');
+  if (!context) throw new Error("useTheme must be used inside ThemeProvider");
   return context;
 };

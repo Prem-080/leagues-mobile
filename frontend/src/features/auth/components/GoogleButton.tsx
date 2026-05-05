@@ -1,14 +1,14 @@
 import React from 'react';
-import { Pressable, Text, View, StyleSheet } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 export default function GoogleButton() {
   return (
-    <Pressable style={styles.button}>
-      <View style={styles.content}>
+    <Pressable className="bg-white border border-slate rounded w-full h-10 px-3 justify-center">
+      <View className="flex-row items-center justify-center">
         
         {/* Icon */}
-        <View style={styles.icon}>
+        <View className="absolute left-3">
           <Svg width={20} height={20} viewBox="0 0 48 48">
             <Path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
             <Path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -18,37 +18,9 @@ export default function GoogleButton() {
         </View>
 
         {/* Text */}
-        <Text style={styles.text}>Sign in with Google</Text>
+        <Text className="text-sm font-medium">Sign in with Google</Text>
 
       </View>
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#fff',
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: '#747775',
-    height: 40,
-    paddingHorizontal: 12,
-    justifyContent: 'center',
-    width:"100%"
-  },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    position: 'absolute',
-    left: 12,
-  },
-  text: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#1f1f1f',
-
-  },
-});

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import {
   View,
-  StyleSheet,
   Animated,
   Easing,
+  StyleSheet,
   useWindowDimensions,
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -44,7 +44,7 @@ function FloatingItem({ icon, duration }: { icon: IconType; duration: number }) 
   const anim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.loop(
+    const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(anim, {
           toValue: 1,
@@ -59,10 +59,15 @@ function FloatingItem({ icon, duration }: { icon: IconType; duration: number }) 
           useNativeDriver: true,
         }),
       ])
-    ).start();
+    );
 
-    return () => anim.stopAnimation();
-  }, []);
+    loop.start();
+
+    return () => {
+      loop.stop();
+      anim.stopAnimation();
+    };
+  }, [anim, duration]);
 
   const scale = anim.interpolate({
     inputRange: [0, 1],
@@ -74,8 +79,8 @@ function FloatingItem({ icon, duration }: { icon: IconType; duration: number }) 
   return (
     <Animated.View
       style={[
-        styles.iconWrapper,
         {
+          position: 'absolute',
           top: icon.y,
           left: icon.x,
           opacity: 0.15,
@@ -94,20 +99,10 @@ export default function FloatingBackground() {
   const icons = useMemo(() => ICONS_DATA(w, h), [w, h]);
 
   return (
-    <View style={styles.container} pointerEvents="none">
+    <View className="absolute inset-0 z-0" style={StyleSheet.absoluteFillObject} pointerEvents="none">
       {icons.map((icon, index) => (
         <FloatingItem key={index} icon={icon} duration={DURATIONS[index]} />
       ))}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 0,
-  },
-  iconWrapper: {
-    position: 'absolute',
-  },
-});
