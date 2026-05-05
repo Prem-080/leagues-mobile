@@ -4,6 +4,7 @@ import { Link, router } from 'expo-router';
 import Button from '@/src/shared/ui/Button';
 import { useAuth } from '@/src/features/auth';
 import { Redirect } from 'expo-router';
+import "../../global.css";
 
 type User = {
   token: string;
